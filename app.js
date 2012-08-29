@@ -35,7 +35,8 @@ http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
 
-//重定向到吴老师的博客
-app.post('/saveUser', function(req,res){
-    res.redirect('http://marshal.easymorse.com');
+//TODO file 收到文件，并打印日志
+app.post('/saveFile', function(req,res){
+    console.log(req.files);
+    res.end();
 });
