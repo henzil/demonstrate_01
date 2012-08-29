@@ -13,6 +13,6 @@ results
 
 node_modules
 npm-debug.log
-.idea
-.idea/workspace.xml
+.idea/**/*
+.DS_Store
 tank.png
