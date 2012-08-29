@@ -35,14 +35,24 @@
 //});
 
 
-var now = new Date();
-var jsdom = require('jsdom');
+var $ = require('jquery');
+var http = require('http');
 
-jsdom.env('http://marshal.easymorse.com', [
-    'http://code.jquery.com/jquery-1.8.0.min.js'
-],
-function (errors, window) {
-    console.log('本页有', window.$('div .post').length, '篇文章');
-    var time = new Date().getTime() - now.getTime();
-    console.log('耗时：' + time + 'ms');
+var options = {
+    host:'marshal.easymorse.com',
+    port:80,
+    path:'/'
+};
+
+var html ='';
+
+http.get(options, function (res) {
+    res.on('data',function (data) {
+        html += data;
+    }).on('end', function () {
+            var dom = $(html);
+            var now = new Date();
+            console.log('本页有', dom.find('div .post').length, '篇文章');
+            console.log('耗时：' + (new Date().getTime() - now.getTime()) + 'ms');
+        });
 });
