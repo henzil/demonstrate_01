@@ -6,7 +6,7 @@
 var express = require('express')
   , routes = require('./routes')
   , http = require('http')
-//  , fs = require('fs')
+  , fs = require('fs')
   , path = require('path');
 
 var app = express();
@@ -21,7 +21,7 @@ app.configure(function(){
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
-//  app.use(express.logger({stream: fs.createWriteStream('./myLogFile.log', {flags: 'a'})}))
+  app.use(express.logger({stream: fs.createWriteStream('./myLogFile.log', {flags: 'a'})}))
 
 });
 
@@ -35,8 +35,17 @@ http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
 
-//TODO file 收到文件，并打印日志
-app.post('/saveFile', function(req,res){
+//TODO file 收到文件并储存
+app.post('/saveFile', function (req, res) {
     console.log(req.files);
+
+    var tmp_path = req.files.file.path;
+    var target_path = './public/images/' + req.files.file.name;
+    fs.rename(tmp_path, target_path, function (err) {
+        if (err) throw err;
+        fs.unlink(tmp_path, function () {
+            if (err) throw err;
+        });
+    });
     res.end();
 });
