@@ -34,3 +34,13 @@ app.get('/', routes.index);
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
+
+
+app.post('/saveUser', function(req,res){
+    res.send('hello:'+req.body.userName);
+    res.end();
+});
+app.get('/saveUser', function(req,res){
+    res.send('hello:'+req.query.userName);
+    res.end();
+});
