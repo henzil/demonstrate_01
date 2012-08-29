@@ -6,6 +6,7 @@
 var express = require('express')
   , routes = require('./routes')
   , http = require('http')
+//  , fs = require('fs')
   , path = require('path');
 
 var app = express();
@@ -20,7 +21,7 @@ app.configure(function(){
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
-
+//  app.use(express.logger({stream: fs.createWriteStream('./myLogFile.log', {flags: 'a'})}))
 
 });
 
