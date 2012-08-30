@@ -21,9 +21,10 @@ app.configure(function(){
     app.use(express.methodOverride());
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));
-    app.use(express.logger({stream: fs.createWriteStream('./myLogFile.log', {flags: 'a'})}))
 
 });
+
+app.use(express.logger({stream: fs.createWriteStream('./myLogFile.log', {flags: 'a'})}));
 
 app.configure('development', function(){
     app.use(express.errorHandler());
