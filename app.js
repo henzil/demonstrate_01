@@ -35,7 +35,7 @@ http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
 
-//TODO file 收到文件并储存
+// TODO 下载文件
 app.post('/saveFile', function (req, res) {
     console.log(req.files);
 
@@ -47,5 +47,16 @@ app.post('/saveFile', function (req, res) {
             if (err) throw err;
         });
     });
-    res.end();
+    res.redirect('showFile?fileName=' + req.files.file.name);
+});
+
+app.get('/showFile', function (req, res) {
+    var filePath = './public/images/' + req.query.fileName;
+    console.log(filePath);
+
+    fs.readFile(filePath, "binary", function (error, file) {
+        res.writeHead(200, {"Content-Type":"image/png"});
+        res.write(file, "binary");
+        res.end();
+    });
 });
