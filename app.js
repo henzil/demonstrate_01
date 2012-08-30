@@ -6,6 +6,7 @@
 var express = require('express')
   , routes = require('./routes')
   , http = require('http')
+  , ejs=require('ejs')
   , fs = require('fs')
   , path = require('path');
 
@@ -35,39 +36,14 @@ http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
 
-var Db = require('mongodb').Db;
-var Server = require('mongodb').Server;
-//TODO 储存后并查询出来。
-app.post('/saveUser', function (req, res) {
-    var user={};
-    user.name=req.body.userName;
-
-    var db=new Db('test',new Server('localhost',27017,{auto_reconnect:true}, {}));
-    db.open(function(){
-        console.log('db opened');
-        db.collection('my_users',function(err,collection){
-            if (err) callback(err);
-            collection.insert(user,{safe:true},function(err,docs){
-                console.log(docs[0]._id);
-                res.redirect('showUsers');
-            });
-        });
-    });
-//    res.end();
+app.post('/saveUser', function(req,res){
+    var data=req.body;
+    var template='<html><body><h1>你好，<%=userName%></h1></body></html>';
+    //res.send('hello:'+req.body.userName);
+    res.send(ejs.render(template,data));
+    res.end();
 });
-
-app.get('/showUsers',function(req,res){
-    var users=[];
-
-    var db=new Db('test',new Server('localhost',27017,{auto_reconnect:true}, {}));
-    db.open(function(){
-        db.collection('my_users',function(err,collection){
-            if (err) callback(err);
-            collection.find({}).toArray(function(err,docs){
-                if (err) callback(err);
-                console.log(docs);
-            });
-        });
-    });
+app.get('/saveUser', function(req,res){
+    res.send('hello:'+req.query.userName);
     res.end();
 });
